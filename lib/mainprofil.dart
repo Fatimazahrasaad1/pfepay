@@ -2,7 +2,6 @@ import 'package:flutter/material.dart';
 import 'package:provider/provider.dart'; // Import de Provider
 import 'package:mkadia/provider/userProvider.dart'; // Import du UserProvider
 import 'package:mkadia/views/profil/profil.dart'; // Import de la page de profil
-import 'package:mkadia/views/home/HomeView.dart'; // Assurez-vous que HomeView est correct
 
 void main() {
   runApp(const MyApp());
@@ -21,10 +20,7 @@ class MyApp extends StatelessWidget {
           primarySwatch: Colors.green,
           visualDensity: VisualDensity.adaptivePlatformDensity,
         ),
-        home: HomeView(), // Suppression du `const`
-        routes: {
-          '/profil': (context) => ProfilPage(), // Suppression du `const`
-        },
+        home: const ProfilPage(), // Suppression du `const` ici car ProfilPage peut avoir des dépendances
       ),
     );
   }
