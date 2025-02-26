@@ -1,31 +1,44 @@
 import 'package:flutter/material.dart';
-import 'package:mkadia/models/user.dart'; // Assurez-vous d'importer correctement le fichier user.dart
+import 'package:provider/provider.dart'; // Import pour Provider
+import 'package:mkadia/provider/userProvider.dart'; // Assurez-vous d'importer le fichier userProvider.dart
 import 'package:mkadia/views/parametre/parametre.dart';
 import 'package:mkadia/views/home/HomeView.dart';
 
 class ProfilPage extends StatelessWidget {
-  final User user;
-
-  const ProfilPage({super.key, required this.user});
+  const ProfilPage({super.key}); // Utilisation du super key
 
   @override
   Widget build(BuildContext context) {
+    // Récupère l'utilisateur à partir du provider
+    final user = Provider.of<UserProvider>(context).user;
+
+    // Vérifie si l'utilisateur existe
+    if (user == null) {
+      return Scaffold(
+        appBar: AppBar(
+          title: const Text('Profil Utilisateur'),
+          backgroundColor: Colors.green,
+          elevation: 0,
+        ),
+        body: const Center(child: CircularProgressIndicator()), // Ajout de const
+      );
+    }
+
     return Scaffold(
       appBar: AppBar(
         title: const Text('Profil Utilisateur'),
-        backgroundColor: Colors.green, // Couleur verte pour l'AppBar
+        backgroundColor: Colors.green,
         elevation: 0,
         actions: [
           IconButton(
             icon: const Icon(Icons.logout),
             onPressed: () {
-              // Action de déconnexion
-              Navigator.push(
-                      context,
-                      MaterialPageRoute(
-                        builder: (context) => HomeView(),                   
-                      ),
-                    );
+              // Déconnexion de l'utilisateur
+              Provider.of<UserProvider>(context, listen: false).logout();
+              Navigator.pushReplacement(
+                context,
+                MaterialPageRoute(builder: (context) => const HomeView()), // Ajout de const
+              );
             },
           ),
         ],
@@ -80,7 +93,7 @@ class ProfilPage extends StatelessWidget {
                   leading: const Icon(Icons.history, color: Colors.green),
                   title: const Text('Voir l\'historique'),
                   onTap: () {
-                    Navigator.pushNamed(context, '/orderHistory'); // Redirection vers la page de l'historique des commandes
+                    Navigator.pushNamed(context, '/orderHistory'); // Redirection vers l'historique des commandes
                   },
                 ),
               ],
@@ -96,11 +109,10 @@ class ProfilPage extends StatelessWidget {
                   leading: const Icon(Icons.settings, color: Colors.green),
                   title: const Text('Paramètres'),
                   onTap: () {
-                    // Utilisation de Navigator.push pour une redirection directe vers ParametrePage
                     Navigator.push(
                       context,
                       MaterialPageRoute(
-                        builder: (context) => const ParametrePage(), // Création d'une instance de ParametrePage
+                        builder: (context) => const ParametrePage(), // Ajout de const
                       ),
                     );
                   },

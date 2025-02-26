@@ -1,70 +1,70 @@
 import 'package:flutter/material.dart';
+import 'package:provider/provider.dart';  // Ajoutez le provider ici
+import 'package:mkadia/provider/provi_confidentialit%C3%A9.dart';  // Assurez-vous d'importer votre provider
 
-class GererLaConfidentialitePage extends StatefulWidget {
-  @override
-  _GererLaConfidentialitePageState createState() =>
-      _GererLaConfidentialitePageState();
-}
-
-class _GererLaConfidentialitePageState
-    extends State<GererLaConfidentialitePage> {
-  bool _isDataSharingEnabled = true;
-  bool _isLocationEnabled = true;
-  bool _isNotificationsEnabled = true;
-
+class GererLaConfidentialitePage extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
-    return Scaffold(
-      backgroundColor: Colors.white,
-      appBar: AppBar(
-        title: Text(
-          'Sécurité et Confidentialité',
-          style: TextStyle(
-            fontWeight: FontWeight.bold,
-            fontSize: 20,
+    return ChangeNotifierProvider(
+      create: (context) => PrivacySettingsProvider(),
+      child: Scaffold(
+        backgroundColor: Colors.white,
+        appBar: AppBar(
+          title: Text(
+            'Sécurité et Confidentialité',
+            style: TextStyle(
+              fontWeight: FontWeight.bold,
+              fontSize: 20,
+            ),
           ),
+          backgroundColor: Colors.green,
+          elevation: 0,
+          centerTitle: true,
         ),
-        backgroundColor: Colors.green,
-        elevation: 0,
-        centerTitle: true,
-      ),
-      body: Padding(
-        padding: const EdgeInsets.all(20.0),
-        child: SingleChildScrollView(
-          child: Column(
-            crossAxisAlignment: CrossAxisAlignment.start,
-            children: [
-              _buildSettingTile(
-                title: 'Partage de données',
-                description: 'Gérez vos préférences de partage de données.',
-                value: _isDataSharingEnabled,
-                onChanged: (bool value) {
-                  setState(() {
-                    _isDataSharingEnabled = value;
-                  });
-                },
-              ),
-              _buildSettingTile(
-                title: 'Localisation',
-                description: 'Activez ou désactivez l\'accès à votre localisation.',
-                value: _isLocationEnabled,
-                onChanged: (bool value) {
-                  setState(() {
-                    _isLocationEnabled = value;
-                  });
-                },
-              ),
-              _buildSettingTile(
-                title: 'Notifications',
-                description: 'Recevez des notifications concernant la confidentialité.',
-                value: _isNotificationsEnabled,
-                onChanged: (bool value) {
-                  setState(() {
-                    _isNotificationsEnabled = value;
-                  });
-                },
-              ),
-            ],
+        body: Padding(
+          padding: const EdgeInsets.all(20.0),
+          child: SingleChildScrollView(
+            child: Column(
+              crossAxisAlignment: CrossAxisAlignment.start,
+              children: [
+                Consumer<PrivacySettingsProvider>(
+                  builder: (context, provider, child) {
+                    return _buildSettingTile(
+                      title: 'Partage de données',
+                      description: 'Gérez vos préférences de partage de données.',
+                      value: provider.isDataSharingEnabled,
+                      onChanged: (bool value) {
+                        provider.setDataSharingEnabled(value);
+                      },
+                    );
+                  },
+                ),
+                Consumer<PrivacySettingsProvider>(
+                  builder: (context, provider, child) {
+                    return _buildSettingTile(
+                      title: 'Localisation',
+                      description: 'Activez ou désactivez l\'accès à votre localisation.',
+                      value: provider.isLocationEnabled,
+                      onChanged: (bool value) {
+                        provider.setLocationEnabled(value);
+                      },
+                    );
+                  },
+                ),
+                Consumer<PrivacySettingsProvider>(
+                  builder: (context, provider, child) {
+                    return _buildSettingTile(
+                      title: 'Notifications',
+                      description: 'Recevez des notifications concernant la confidentialité.',
+                      value: provider.isNotificationsEnabled,
+                      onChanged: (bool value) {
+                        provider.setNotificationsEnabled(value);
+                      },
+                    );
+                  },
+                ),
+              ],
+            ),
           ),
         ),
       ),

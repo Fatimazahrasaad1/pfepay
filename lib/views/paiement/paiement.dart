@@ -1,47 +1,15 @@
 import 'package:flutter/material.dart';
-import 'package:mkadia/models/Infopaiement.dart';
+import 'package:provider/provider.dart';
+import 'package:mkadia/provider/provider_payment.dart'; // Assurez-vous d'importer le provider
 
-class PaymentPage extends StatefulWidget {
-  @override
-  _PaymentPageState createState() => _PaymentPageState();
-}
-
-class _PaymentPageState extends State<PaymentPage> {
-  final _formKey = GlobalKey<FormState>();
-  // Utilisation des données de Infopaiement.dart
-  PaymentInfo paymentInfo = PaymentInfo.examplePayments()[0]; // Utilisation du premier objet de la liste examplePayments
-
-  String _selectedPaymentMethod = 'Carte de Crédit';
-
-  void _confirmPayment() {
-    if (_formKey.currentState!.validate()) {
-      _formKey.currentState!.save();
-      // Action de confirmation, vous pouvez ajouter une autre page de confirmation si nécessaire
-      showDialog(
-        context: context,
-        builder: (BuildContext context) {
-          return AlertDialog(
-            title: Text('Confirmation'),
-            content: Text('Paiement confirmé pour ${paymentInfo.name}.'),
-            actions: [
-              TextButton(
-                onPressed: () {
-                  Navigator.pop(context);
-                },
-                child: Text('Fermer'),
-              ),
-            ],
-          );
-        },
-      );
-    }
-  }
-
+class PaymentPage extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
+    final paymentProvider = Provider.of<PaymentProvider>(context);
+
     return Scaffold(
       appBar: AppBar(
-        title: Text('Paiement', style: TextStyle(fontWeight: FontWeight.bold)),
+        title: Text('Paiement'),
         backgroundColor: Colors.green,
         elevation: 0,
       ),
@@ -60,12 +28,15 @@ class _PaymentPageState extends State<PaymentPage> {
               elevation: 2,
               child: Padding(
                 padding: const EdgeInsets.all(12.0),
-                child: Text('${paymentInfo.address}, ${paymentInfo.city}, ${paymentInfo.country}', style: TextStyle(fontSize: 16)),
+                child: Text(
+                  '${paymentProvider.paymentInfo.address}, ${paymentProvider.paymentInfo.city}, ${paymentProvider.paymentInfo.country}',
+                  style: TextStyle(fontSize: 16),
+                ),
               ),
             ),
             Divider(),
             SizedBox(height: 16),
-            
+
             // Sélection de la méthode de paiement
             Text(
               'Méthode de Paiement',
@@ -77,11 +48,11 @@ class _PaymentPageState extends State<PaymentPage> {
               child: Padding(
                 padding: const EdgeInsets.all(12.0),
                 child: DropdownButton<String>(
-                  value: _selectedPaymentMethod,
+                  value: paymentProvider.selectedPaymentMethod,
                   onChanged: (String? newValue) {
-                    setState(() {
-                      _selectedPaymentMethod = newValue!;
-                    });
+                    if (newValue != null) {
+                      paymentProvider.setSelectedPaymentMethod(newValue);
+                    }
                   },
                   items: <String>['Carte de Crédit', 'PayPal', 'Apple Pay', 'Google Pay']
                       .map<DropdownMenuItem<String>>((String value) {
@@ -96,40 +67,37 @@ class _PaymentPageState extends State<PaymentPage> {
             SizedBox(height: 16),
 
             // Formulaire de paiement pour la carte de crédit
-            if (_selectedPaymentMethod == 'Carte de Crédit')
+            if (paymentProvider.selectedPaymentMethod == 'Carte de Crédit')
               Form(
-                key: _formKey,
                 child: Column(
                   children: [
                     TextFormField(
+                      initialValue: paymentProvider.paymentInfo.name,
                       decoration: InputDecoration(labelText: 'Nom sur la carte'),
-                      validator: (value) => value == null || value.isEmpty ? 'Entrez votre nom' : null,
-                      onSaved: (value) => paymentInfo.name = value!,
+                      onChanged: (value) => paymentProvider.paymentInfo.name = value,
                     ),
                     TextFormField(
+                      initialValue: paymentProvider.paymentInfo.cardNumber,
                       decoration: InputDecoration(labelText: 'Numéro de carte'),
                       keyboardType: TextInputType.number,
-                      validator: (value) => value == null || value.length != 16 ? 'Numéro invalide' : null,
-                      onSaved: (value) => paymentInfo.cardNumber = value!,
+                      onChanged: (value) => paymentProvider.paymentInfo.cardNumber = value,
                     ),
                     Row(
                       children: [
                         Expanded(
                           child: TextFormField(
+                            initialValue: paymentProvider.paymentInfo.expiryDate,
                             decoration: InputDecoration(labelText: 'Date d\'expiration'),
-                            keyboardType: TextInputType.datetime,
-                            validator: (value) => value == null || value.isEmpty ? 'Entrez la date' : null,
-                            onSaved: (value) => paymentInfo.expiryDate = value!,
+                            onChanged: (value) => paymentProvider.paymentInfo.expiryDate = value,
                           ),
                         ),
                         SizedBox(width: 16),
                         Expanded(
                           child: TextFormField(
+                            initialValue: paymentProvider.paymentInfo.cvv,
                             decoration: InputDecoration(labelText: 'CVV'),
-                            keyboardType: TextInputType.number,
                             obscureText: true,
-                            validator: (value) => value == null || value.length != 3 ? 'CVV invalide' : null,
-                            onSaved: (value) => paymentInfo.cvv = value!,
+                            onChanged: (value) => paymentProvider.paymentInfo.cvv = value,
                           ),
                         ),
                       ],
@@ -141,7 +109,9 @@ class _PaymentPageState extends State<PaymentPage> {
 
             // Bouton de confirmation de paiement
             ElevatedButton(
-              onPressed: _confirmPayment,
+              onPressed: () {
+                // Ajouter votre logique de confirmation ici
+              },
               style: ElevatedButton.styleFrom(
                 backgroundColor: Colors.green, // couleur du bouton
                 padding: EdgeInsets.symmetric(vertical: 16),

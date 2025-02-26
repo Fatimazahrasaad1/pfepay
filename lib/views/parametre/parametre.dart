@@ -1,22 +1,20 @@
 import 'package:flutter/material.dart';
-import 'package:mkadia/views/parametre/paiementsave.dart'; 
+import 'package:mkadia/views/parametre/paiementsave.dart';
 import 'package:mkadia/views/home/HomeView.dart';
 import 'package:mkadia/views/parametre/update_adresses_livraison.dart' as livraison;
 import 'package:mkadia/views/parametre/change_mot_de_pass.dart';
 import 'package:mkadia/views/parametre/gerer_la_confidentialité.dart' as confidentialite;
 import 'package:mkadia/views/profil/profil.dart';
-import 'package:mkadia/models/user.dart';
 
 class ParametrePage extends StatefulWidget {
-  const ParametrePage({super.key});
+  const ParametrePage({Key? key}) : super(key: key); // Ajout du paramètre key
 
   @override
   ParametrePageState createState() => ParametrePageState();
 }
 
-// Suppression du "_" pour rendre la classe publique
 class ParametrePageState extends State<ParametrePage> {
-  bool _notificationsEnabled = true; // État des notifications
+  bool _notificationsEnabled = true;
 
   @override
   Widget build(BuildContext context) {
@@ -29,10 +27,10 @@ class ParametrePageState extends State<ParametrePage> {
           IconButton(
             icon: const Icon(Icons.logout),
             onPressed: () {
-              Navigator.push(
+              Navigator.pushReplacement(
                 context,
                 MaterialPageRoute(
-                  builder: (context) => HomeView(),
+                  builder: (context) => const HomeView(),
                 ),
               );
             },
@@ -59,9 +57,7 @@ class ParametrePageState extends State<ParametrePage> {
                 ),
               ],
             ),
-
             const SizedBox(height: 20),
-
             _buildCard(
               title: 'Méthodes de paiement',
               children: [
@@ -72,16 +68,14 @@ class ParametrePageState extends State<ParametrePage> {
                     Navigator.push(
                       context,
                       MaterialPageRoute(
-                        builder: (context) => PaymentSavePage(),
+                        builder: (context) =>  PaymentSavePage(),
                       ),
                     );
                   },
                 ),
               ],
             ),
-
             const SizedBox(height: 20),
-
             _buildCard(
               title: 'Préférences de livraison',
               children: [
@@ -92,17 +86,14 @@ class ParametrePageState extends State<ParametrePage> {
                     Navigator.push(
                       context,
                       MaterialPageRoute(
-                        builder: (context) => livraison.UpdateAdressesLivraisonPage(),
-
+                        builder: (context) =>  livraison.UpdateAdressesLivraisonPage(),
                       ),
                     );
                   },
                 ),
               ],
             ),
-
             const SizedBox(height: 20),
-
             _buildCard(
               title: 'Sécurité et confidentialité',
               children: [
@@ -113,7 +104,7 @@ class ParametrePageState extends State<ParametrePage> {
                     Navigator.push(
                       context,
                       MaterialPageRoute(
-                        builder: (context) => ChangeMotDePassePage(),
+                        builder: (context) =>  ChangeMotDePassePage(),
                       ),
                     );
                   },
@@ -125,26 +116,24 @@ class ParametrePageState extends State<ParametrePage> {
                     Navigator.push(
                       context,
                       MaterialPageRoute(
-                        builder: (context) => confidentialite.GererLaConfidentialitePage(),
+                        builder: (context) =>  confidentialite.GererLaConfidentialitePage(),
                       ),
                     );
                   },
                 ),
               ],
             ),
-
             const SizedBox(height: 20),
-
             ListTile(
               leading: const Icon(Icons.account_circle, color: Colors.green),
               title: const Text('Voir le profil utilisateur'),
               onTap: () {
-              Navigator.push(
-                      context,
-                      MaterialPageRoute(
-                        builder: (context) =>ProfilPage(user: users[0]),
-                      ),
-                    );
+                Navigator.push(
+                  context,
+                  MaterialPageRoute(
+                    builder: (context) =>  ProfilPage(),
+                  ),
+                );
               },
             ),
           ],
@@ -161,14 +150,7 @@ class ParametrePageState extends State<ParametrePage> {
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
-            Text(
-              title,
-              style: const TextStyle(
-                fontSize: 18,
-                fontWeight: FontWeight.bold,
-                color: Colors.green,
-              ),
-            ),
+            Text(title, style: const TextStyle(fontSize: 18, fontWeight: FontWeight.bold, color: Colors.green)),
             const SizedBox(height: 10),
             ...children,
           ],

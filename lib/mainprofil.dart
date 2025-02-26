@@ -1,20 +1,31 @@
 import 'package:flutter/material.dart';
-import 'package:mkadia/models/user.dart'; // Assurez-vous d'importer le fichier user.dart
-import 'package:mkadia/views/profil/profil.dart'; // Assurez-vous que ProfilPage est bien défini
+import 'package:provider/provider.dart'; // Import de Provider
+import 'package:mkadia/provider/userProvider.dart'; // Import du UserProvider
+import 'package:mkadia/views/profil/profil.dart'; // Import de la page de profil
+import 'package:mkadia/views/home/HomeView.dart'; // Assurez-vous que HomeView est correct
 
 void main() {
-  runApp(MyApp());
+  runApp(const MyApp());
 }
 
 class MyApp extends StatelessWidget {
+  const MyApp({Key? key}) : super(key: key); // Ajout du paramètre `Key? key`
+
   @override
   Widget build(BuildContext context) {
-    return MaterialApp(
-      title: 'Application Flutter',
-      theme: ThemeData(
-        primarySwatch: Colors.green,
+    return ChangeNotifierProvider(
+      create: (_) => UserProvider(),
+      child: MaterialApp(
+        title: 'Mon Application',
+        theme: ThemeData(
+          primarySwatch: Colors.green,
+          visualDensity: VisualDensity.adaptivePlatformDensity,
+        ),
+        home: const HomeView(), // Ajout de `const`
+        routes: {
+          '/profil': (context) =>  ProfilPage(), // Ajout de `const`
+        },
       ),
-      home: ProfilPage(user: users[0]), // Passez le premier utilisateur de la liste users
     );
   }
 }

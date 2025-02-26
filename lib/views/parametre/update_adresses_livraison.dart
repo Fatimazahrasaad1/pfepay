@@ -1,49 +1,17 @@
 import 'package:flutter/material.dart';
+import 'package:provider/provider.dart';
+import 'package:mkadia/provider/adresseprovider.dart';
 
-class UpdateAdressesLivraisonPage extends StatefulWidget {
-  @override
-  _UpdateAdressesLivraisonPageState createState() =>
-      _UpdateAdressesLivraisonPageState();
-}
-
-class _UpdateAdressesLivraisonPageState
-    extends State<UpdateAdressesLivraisonPage> {
+class UpdateAdressesLivraisonPage extends StatelessWidget {
   final _formKey = GlobalKey<FormState>();
-
-  String _address = '';
-  String _city = '';
-  String _postalCode = '';
-
   final TextEditingController _addressController = TextEditingController();
   final TextEditingController _cityController = TextEditingController();
   final TextEditingController _postalCodeController = TextEditingController();
 
   @override
-  void initState() {
-    super.initState();
-    // Initialisation des champs avec des valeurs par défaut
-    _addressController.text = _address;
-    _cityController.text = _city;
-    _postalCodeController.text = _postalCode;
-  }
-
-  void _saveAddress() {
-    if (_formKey.currentState!.validate()) {
-      setState(() {
-        _address = _addressController.text;
-        _city = _cityController.text;
-        _postalCode = _postalCodeController.text;
-      });
-
-      // Affichage d'un message de confirmation
-      ScaffoldMessenger.of(context).showSnackBar(
-        SnackBar(content: Text('Adresse de livraison mise à jour avec succès!')),
-      );
-    }
-  }
-
-  @override
   Widget build(BuildContext context) {
+    final adresseProvider = Provider.of<AdresseProvider>(context);
+
     return Scaffold(
       backgroundColor: Colors.white,
       appBar: AppBar(
@@ -57,108 +25,98 @@ class _UpdateAdressesLivraisonPageState
       body: Padding(
         padding: const EdgeInsets.symmetric(horizontal: 20.0, vertical: 30.0),
         child: SingleChildScrollView(
-          child: Column(
-            crossAxisAlignment: CrossAxisAlignment.start,
-            children: [
-              // Champ pour l'adresse
-              TextFormField(
-                controller: _addressController,
-                decoration: InputDecoration(
-                  labelText: 'Adresse',
-                  hintText: 'Entrez votre adresse de livraison',
-                  fillColor: Colors.white,
-                  filled: true,
-                  border: OutlineInputBorder(
-                    borderRadius: BorderRadius.circular(12.0),
-                    borderSide: BorderSide(color: Colors.green, width: 1), // Bord visible
-                  ),
-                  prefixIcon: Icon(Icons.location_on, color: Colors.green),
+          child: Form(
+            key: _formKey,
+            child: Column(
+              crossAxisAlignment: CrossAxisAlignment.start,
+              children: [
+                // Champ Adresse
+                TextFormField(
+                  controller: _addressController,
+                  decoration: _inputDecoration('Adresse', Icons.location_on),
+                  validator: (value) =>
+                      value!.isEmpty ? 'Veuillez entrer une adresse' : null,
                 ),
-                validator: (value) {
-                  if (value == null || value.isEmpty) {
-                    return 'Veuillez entrer une adresse';
-                  }
-                  return null;
-                },
-              ),
-              const SizedBox(height: 20),
+                SizedBox(height: 20),
 
-              // Champ pour la ville
-              TextFormField(
-                controller: _cityController,
-                decoration: InputDecoration(
-                  labelText: 'Ville',
-                  hintText: 'Entrez votre ville',
-                  fillColor: Colors.white,
-                  filled: true,
-                  border: OutlineInputBorder(
-                    borderRadius: BorderRadius.circular(12.0),
-                    borderSide: BorderSide(color: Colors.green, width: 1), // Bord visible
-                  ),
-                  prefixIcon: Icon(Icons.location_city, color: Colors.green),
+                // Champ Ville
+                TextFormField(
+                  controller: _cityController,
+                  decoration: _inputDecoration('Ville', Icons.location_city),
+                  validator: (value) =>
+                      value!.isEmpty ? 'Veuillez entrer une ville' : null,
                 ),
-                validator: (value) {
-                  if (value == null || value.isEmpty) {
-                    return 'Veuillez entrer une ville';
-                  }
-                  return null;
-                },
-              ),
-              const SizedBox(height: 20),
+                SizedBox(height: 20),
 
-              // Champ pour le code postal
-              TextFormField(
-                controller: _postalCodeController,
-                decoration: InputDecoration(
-                  labelText: 'Code Postal',
-                  hintText: 'Entrez votre code postal',
-                  fillColor: Colors.white,
-                  filled: true,
-                  border: OutlineInputBorder(
-                    borderRadius: BorderRadius.circular(12.0),
-                    borderSide: BorderSide(color: Colors.green, width: 1), // Bord visible
-                  ),
-                  prefixIcon: Icon(Icons.pin, color: Colors.green),
+                // Champ Code Postal
+                TextFormField(
+                  controller: _postalCodeController,
+                  decoration: _inputDecoration('Code Postal', Icons.pin),
+                  validator: (value) =>
+                      value!.isEmpty ? 'Veuillez entrer un code postal' : null,
                 ),
-                validator: (value) {
-                  if (value == null || value.isEmpty) {
-                    return 'Veuillez entrer un code postal';
-                  }
-                  return null;
-                },
-              ),
-              const SizedBox(height: 30),
+                SizedBox(height: 30),
 
-              // Bouton pour sauvegarder les informations aligné à droite et taille modérée
-              Align(
-                alignment: Alignment.centerRight, // Aligne le bouton à droite
-                child: ElevatedButton(
-                  onPressed: _saveAddress,
-                  child: Padding(
-                    padding: const EdgeInsets.symmetric(horizontal: 20.0, vertical: 12.0),
-                    child: Text(
-                      'Sauvegarder',
-                      style: TextStyle(
-                        fontSize: 16, // Taille modérée du texte
-                        fontWeight: FontWeight.bold,
-                        color: Colors.white,
+                // Bouton Sauvegarder
+                Align(
+                  alignment: Alignment.centerRight,
+                  child: ElevatedButton(
+                    onPressed: () {
+                      if (_formKey.currentState!.validate()) {
+                        adresseProvider.updateAdresse(
+                          _addressController.text,
+                          _cityController.text,
+                          _postalCodeController.text,
+                        );
+
+                        ScaffoldMessenger.of(context).showSnackBar(
+                          SnackBar(
+                            content:
+                                Text('Adresse de livraison mise à jour avec succès!'),
+                          ),
+                        );
+                      }
+                    },
+                    child: Padding(
+                      padding:
+                          const EdgeInsets.symmetric(horizontal: 20.0, vertical: 12.0),
+                      child: Text(
+                        'Sauvegarder',
+                        style: TextStyle(
+                          fontSize: 16,
+                          fontWeight: FontWeight.bold,
+                          color: Colors.white,
+                        ),
                       ),
                     ),
-                  ),
-                  style: ElevatedButton.styleFrom(
-                    backgroundColor: Colors.green, // Remplacer 'primary' par 'backgroundColor'
-                    shape: RoundedRectangleBorder(
-                      borderRadius: BorderRadius.circular(30.0), // Forme arrondie du bouton
+                    style: ElevatedButton.styleFrom(
+                      backgroundColor: Colors.green,
+                      shape: RoundedRectangleBorder(
+                        borderRadius: BorderRadius.circular(30.0),
+                      ),
+                      elevation: 8,
+                      minimumSize: Size(150, 50),
                     ),
-                    elevation: 8,
-                    minimumSize: Size(150, 50), // Taille modérée du bouton
                   ),
                 ),
-              ),
-            ],
+              ],
+            ),
           ),
         ),
       ),
+    );
+  }
+
+  InputDecoration _inputDecoration(String label, IconData icon) {
+    return InputDecoration(
+      labelText: label,
+      fillColor: Colors.white,
+      filled: true,
+      border: OutlineInputBorder(
+        borderRadius: BorderRadius.circular(12.0),
+        borderSide: BorderSide(color: Colors.green, width: 1),
+      ),
+      prefixIcon: Icon(icon, color: Colors.green),
     );
   }
 }

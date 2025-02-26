@@ -1,43 +1,70 @@
 import 'package:flutter/material.dart';
+import 'package:provider/provider.dart';
+import 'package:mkadia/provider/prov_savepaiement.dart'; // Import du provider
 
-class PaymentSavePage extends StatefulWidget {
+class PaymentSavePage extends StatelessWidget {
   @override
-  _PaymentSavePageState createState() => _PaymentSavePageState();
-}
-
-class _PaymentSavePageState extends State<PaymentSavePage> {
-  String _selectedPayment = 'Credit Card';
-  final TextEditingController _cardNumberController = TextEditingController();
-  final TextEditingController _expiryDateController = TextEditingController();
-  final TextEditingController _cvvController = TextEditingController();
-  final TextEditingController _paypalEmailController = TextEditingController();
-  final TextEditingController _phoneNumberController = TextEditingController();
-  final TextEditingController _addressController = TextEditingController();
-
-  Future<void> _savePaymentInfo() async {
-    ScaffoldMessenger.of(context).showSnackBar(
-      SnackBar(content: Text('Informations enregistrées avec succès !')),
+  Widget build(BuildContext context) {
+    return ChangeNotifierProvider(
+      create: (context) => PaymentProvider(),
+      child: Scaffold(
+        appBar: AppBar(
+          title: Text('Méthodes de Paiement'),
+          backgroundColor: Colors.green,
+        ),
+        backgroundColor: Colors.green[50],
+        body: Padding(
+          padding: const EdgeInsets.all(16.0),
+          child: Column(
+            children: [
+              _buildPaymentOption(context, 'Credit Card', 'assets/icons/creditcard.png'),
+              SizedBox(height: 10),
+              _buildPaymentOption(context, 'PayPal', 'assets/icons/paypal.png'),
+              SizedBox(height: 10),
+              _buildPaymentOption(context, 'Apple Pay', 'assets/icons/apple-pay.png'),
+              SizedBox(height: 10),
+              _buildPaymentOption(context, 'Google Pay', 'assets/icons/google-pay.png'),
+              SizedBox(height: 20),
+              Consumer<PaymentProvider>(
+                builder: (context, provider, child) => _buildPaymentFields(provider),
+              ),
+              SizedBox(height: 20),
+              ElevatedButton(
+                onPressed: () {
+                  Provider.of<PaymentProvider>(context, listen: false)
+                      .savePaymentInfo(context);
+                },
+                child: Text('Enregistrer'),
+                style: ElevatedButton.styleFrom(
+                  backgroundColor: Colors.green,
+                  foregroundColor: Colors.white,
+                ),
+              ),
+            ],
+          ),
+        ),
+      ),
     );
   }
 
-  Widget _buildPaymentFields() {
-    switch (_selectedPayment) {
+  Widget _buildPaymentFields(PaymentProvider provider) {
+    switch (provider.selectedPayment) {
       case 'Credit Card':
         return Column(
           children: [
-            _buildTextField('Numéro de carte', _cardNumberController),
-            _buildTextField('Date d\'expiration (MM/AA)', _expiryDateController),
-            _buildTextField('CVV', _cvvController, obscureText: true),
+            _buildTextField('Numéro de carte', provider.cardNumberController),
+            _buildTextField('Date d\'expiration (MM/AA)', provider.expiryDateController),
+            _buildTextField('CVV', provider.cvvController, obscureText: true),
           ],
         );
       case 'PayPal':
-        return _buildTextField('E-mail PayPal', _paypalEmailController);
+        return _buildTextField('E-mail PayPal', provider.paypalEmailController);
       case 'Apple Pay':
       case 'Google Pay':
         return Column(
           children: [
-            _buildTextField('Numéro de téléphone', _phoneNumberController),
-            _buildTextField('Adresse', _addressController),
+            _buildTextField('Numéro de téléphone', provider.phoneNumberController),
+            _buildTextField('Adresse', provider.addressController),
           ],
         );
       default:
@@ -45,28 +72,10 @@ class _PaymentSavePageState extends State<PaymentSavePage> {
     }
   }
 
-  Widget _buildTextField(String label, TextEditingController controller, {bool obscureText = false}) {
-    return Padding(
-      padding: const EdgeInsets.symmetric(vertical: 8.0),
-      child: TextField(
-        controller: controller,
-        obscureText: obscureText,
-        decoration: InputDecoration(
-          labelText: label,
-          border: OutlineInputBorder(borderRadius: BorderRadius.circular(10)),
-          filled: true,
-          fillColor: Colors.white,
-        ),
-      ),
-    );
-  }
-
-  Widget _buildPaymentOption(String method, String iconPath) {
+  Widget _buildPaymentOption(BuildContext context, String method, String iconPath) {
     return GestureDetector(
       onTap: () {
-        setState(() {
-          _selectedPayment = method;
-        });
+        Provider.of<PaymentProvider>(context, listen: false).setPaymentMethod(method);
       },
       child: Card(
         elevation: 5,
@@ -89,37 +98,17 @@ class _PaymentSavePageState extends State<PaymentSavePage> {
     );
   }
 
-  @override
-  Widget build(BuildContext context) {
-    return Scaffold(
-      appBar: AppBar(
-        title: Text('Méthodes de Paiement'),
-        backgroundColor: Colors.green,
-      ),
-      backgroundColor: Colors.green[50],
-      body: Padding(
-        padding: const EdgeInsets.all(16.0),
-        child: Column(
-          children: [
-            _buildPaymentOption('Credit Card', 'assets/icons/creditcard.png'),
-            SizedBox(height: 10),
-            _buildPaymentOption('PayPal', 'assets/icons/paypal.png'),
-            SizedBox(height: 10),
-            _buildPaymentOption('Apple Pay', 'assets/icons/apple-pay.png'),
-            SizedBox(height: 10),
-            _buildPaymentOption('Google Pay', 'assets/icons/google-pay.png'),
-            SizedBox(height: 20),
-            _buildPaymentFields(),
-            SizedBox(height: 20),
-            ElevatedButton(
-              onPressed: _savePaymentInfo,
-              child: Text('Enregistrer'),
-              style: ElevatedButton.styleFrom(
-                backgroundColor: Colors.green,
-                foregroundColor: Colors.white,
-              ),
-            ),
-          ],
+  Widget _buildTextField(String label, TextEditingController controller, {bool obscureText = false}) {
+    return Padding(
+      padding: const EdgeInsets.symmetric(vertical: 8.0),
+      child: TextField(
+        controller: controller,
+        obscureText: obscureText,
+        decoration: InputDecoration(
+          labelText: label,
+          border: OutlineInputBorder(borderRadius: BorderRadius.circular(10)),
+          filled: true,
+          fillColor: Colors.white,
         ),
       ),
     );
