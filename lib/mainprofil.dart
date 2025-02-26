@@ -9,7 +9,7 @@ void main() {
 }
 
 class MyApp extends StatelessWidget {
-  const MyApp({Key? key}) : super(key: key); // Ajout du paramètre `Key? key`
+  const MyApp({super.key}); // Utilisation de `super.key`
 
   @override
   Widget build(BuildContext context) {
@@ -21,9 +21,9 @@ class MyApp extends StatelessWidget {
           primarySwatch: Colors.green,
           visualDensity: VisualDensity.adaptivePlatformDensity,
         ),
-        home: const HomeView(), // Ajout de `const`
+        home: HomeView(), // Suppression du `const`
         routes: {
-          '/profil': (context) =>  ProfilPage(), // Ajout de `const`
+          '/profil': (context) => ProfilPage(), // Suppression du `const`
         },
       ),
     );
