@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
-import 'package:mkadia/provider/adresseprovider.dart';
+import 'package:mkadia/provider/adresseprovider.dart'; // Assurez-vous que l'import est correct
 
 class UpdateAdressesLivraisonPage extends StatelessWidget {
   final _formKey = GlobalKey<FormState>();
@@ -8,9 +8,11 @@ class UpdateAdressesLivraisonPage extends StatelessWidget {
   final TextEditingController _cityController = TextEditingController();
   final TextEditingController _postalCodeController = TextEditingController();
 
+  // Retirer le mot-clé 'const' ici
+  UpdateAdressesLivraisonPage({Key? key}) : super(key: key); // Pas besoin de 'const'
+
   @override
   Widget build(BuildContext context) {
-    // Utilisez le widget Consumer pour écouter les changements dans le provider
     return Consumer<AdresseProvider>(
       builder: (context, adresseProvider, child) {
         return Scaffold(
