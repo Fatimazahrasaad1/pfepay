@@ -8,8 +8,7 @@ class UpdateAdressesLivraisonPage extends StatelessWidget {
   final TextEditingController _cityController = TextEditingController();
   final TextEditingController _postalCodeController = TextEditingController();
 
-  // Retirer le mot-clé 'const' ici
-  UpdateAdressesLivraisonPage({Key? key}) : super(key: key); // Pas besoin de 'const'
+  UpdateAdressesLivraisonPage({Key? key}) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
@@ -20,7 +19,7 @@ class UpdateAdressesLivraisonPage extends StatelessWidget {
           appBar: AppBar(
             backgroundColor: Colors.green,
             elevation: 0,
-            title: Text(
+            title: const Text(
               'Modifier l\'adresse de livraison',
               style: TextStyle(fontWeight: FontWeight.bold),
             ),
@@ -40,7 +39,7 @@ class UpdateAdressesLivraisonPage extends StatelessWidget {
                       validator: (value) =>
                           value!.isEmpty ? 'Veuillez entrer une adresse' : null,
                     ),
-                    SizedBox(height: 20),
+                    const SizedBox(height: 20),
 
                     // Champ Ville
                     TextFormField(
@@ -49,7 +48,7 @@ class UpdateAdressesLivraisonPage extends StatelessWidget {
                       validator: (value) =>
                           value!.isEmpty ? 'Veuillez entrer une ville' : null,
                     ),
-                    SizedBox(height: 20),
+                    const SizedBox(height: 20),
 
                     // Champ Code Postal
                     TextFormField(
@@ -58,7 +57,7 @@ class UpdateAdressesLivraisonPage extends StatelessWidget {
                       validator: (value) =>
                           value!.isEmpty ? 'Veuillez entrer un code postal' : null,
                     ),
-                    SizedBox(height: 30),
+                    const SizedBox(height: 30),
 
                     // Bouton Sauvegarder
                     Align(
@@ -73,16 +72,15 @@ class UpdateAdressesLivraisonPage extends StatelessWidget {
                             );
 
                             ScaffoldMessenger.of(context).showSnackBar(
-                              SnackBar(
+                              const SnackBar(
                                 content:
                                     Text('Adresse de livraison mise à jour avec succès!'),
                               ),
                             );
                           }
                         },
-                        child: Padding(
-                          padding:
-                              const EdgeInsets.symmetric(horizontal: 20.0, vertical: 12.0),
+                        child: const Padding(
+                          padding: EdgeInsets.symmetric(horizontal: 20.0, vertical: 12.0),
                           child: Text(
                             'Sauvegarder',
                             style: TextStyle(
@@ -98,7 +96,7 @@ class UpdateAdressesLivraisonPage extends StatelessWidget {
                             borderRadius: BorderRadius.circular(30.0),
                           ),
                           elevation: 8,
-                          minimumSize: Size(150, 50),
+                          minimumSize: const Size(150, 50),
                         ),
                       ),
                     ),
@@ -119,7 +117,7 @@ class UpdateAdressesLivraisonPage extends StatelessWidget {
       filled: true,
       border: OutlineInputBorder(
         borderRadius: BorderRadius.circular(12.0),
-        borderSide: BorderSide(color: Colors.green, width: 1),
+        borderSide: const BorderSide(color: Colors.green, width: 1),
       ),
       prefixIcon: Icon(icon, color: Colors.green),
     );
