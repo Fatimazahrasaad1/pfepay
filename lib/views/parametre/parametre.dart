@@ -1,15 +1,13 @@
 import 'package:flutter/material.dart';
-import 'package:provider/provider.dart'; // Import nécessaire pour ChangeNotifierProvider et Provider
 import 'package:mkadia/views/parametre/paiementsave.dart';
 import 'package:mkadia/views/home/HomeView.dart';
 import 'package:mkadia/views/parametre/update_adresses_livraison.dart' as livraison;
 import 'package:mkadia/views/parametre/change_mot_de_pass.dart';
 import 'package:mkadia/views/parametre/gerer_la_confidentialité.dart' as confidentialite;
 import 'package:mkadia/views/profil/profil.dart';
-import 'package:mkadia/provider/adresseprovider.dart';
 
 class ParametrePage extends StatefulWidget {
-  const ParametrePage({Key? key}) : super(key: key);
+  const ParametrePage({Key? key}) : super(key: key); // Ajout du paramètre key
 
   @override
   ParametrePageState createState() => ParametrePageState();
@@ -70,7 +68,7 @@ class ParametrePageState extends State<ParametrePage> {
                     Navigator.push(
                       context,
                       MaterialPageRoute(
-                        builder: (context) => PaymentSavePage(),
+                        builder: (context) =>  PaymentSavePage(),
                       ),
                     );
                   },
@@ -88,10 +86,7 @@ class ParametrePageState extends State<ParametrePage> {
                     Navigator.push(
                       context,
                       MaterialPageRoute(
-                        builder: (context) => ChangeNotifierProvider.value(
-                          value: Provider.of<AdresseProvider>(context, listen: false),
-                          child: livraison.UpdateAdressesLivraisonPage(), // Correction ici
-                        ),
+                        builder: (context) =>  livraison.UpdateAdressesLivraisonPage(),
                       ),
                     );
                   },
@@ -109,7 +104,7 @@ class ParametrePageState extends State<ParametrePage> {
                     Navigator.push(
                       context,
                       MaterialPageRoute(
-                        builder: (context) => ChangeMotDePassePage(),
+                        builder: (context) =>  ChangeMotDePassePage(),
                       ),
                     );
                   },
@@ -121,7 +116,7 @@ class ParametrePageState extends State<ParametrePage> {
                     Navigator.push(
                       context,
                       MaterialPageRoute(
-                        builder: (context) => confidentialite.GererLaConfidentialitePage(),
+                        builder: (context) =>  confidentialite.GererLaConfidentialitePage(),
                       ),
                     );
                   },
@@ -136,7 +131,7 @@ class ParametrePageState extends State<ParametrePage> {
                 Navigator.push(
                   context,
                   MaterialPageRoute(
-                    builder: (context) => ProfilPage(),
+                    builder: (context) =>  ProfilPage(),
                   ),
                 );
               },
