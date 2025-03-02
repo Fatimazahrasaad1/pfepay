@@ -10,7 +10,7 @@ class UpdateAdressesLivraisonPage extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final adresseProvider = context.watch<AdresseProvider>();
+    final adresseProvider = Provider.of<AdresseProvider>(context);
 
     return Scaffold(
       backgroundColor: Colors.white,
