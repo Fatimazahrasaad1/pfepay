@@ -1,6 +1,4 @@
 import 'package:flutter/material.dart';
-import 'package:provider/provider.dart';
-import 'package:mkadia/provider/adresseprovider.dart';
 
 class UpdateAdressesLivraisonPage extends StatefulWidget {
   @override
@@ -9,18 +7,20 @@ class UpdateAdressesLivraisonPage extends StatefulWidget {
 
 class _UpdateAdressesLivraisonPageState extends State<UpdateAdressesLivraisonPage> {
   final _formKey = GlobalKey<FormState>();
+
+  // Valeurs stockées localement
   late TextEditingController _addressController;
   late TextEditingController _cityController;
   late TextEditingController _postalCodeController;
 
+  // Initialisation avec des valeurs par défaut
   @override
   void initState() {
     super.initState();
-    final adresseProvider = Provider.of<AdresseProvider>(context, listen: false);
     
-    _addressController = TextEditingController(text: adresseProvider.address);
-    _cityController = TextEditingController(text: adresseProvider.city);
-    _postalCodeController = TextEditingController(text: adresseProvider.postalCode);
+    _addressController = TextEditingController(text: '123 Rue Exemple');
+    _cityController = TextEditingController(text: 'Paris');
+    _postalCodeController = TextEditingController(text: '75001');
   }
 
   @override
@@ -33,8 +33,6 @@ class _UpdateAdressesLivraisonPageState extends State<UpdateAdressesLivraisonPag
 
   @override
   Widget build(BuildContext context) {
-    final adresseProvider = Provider.of<AdresseProvider>(context);
-
     return Scaffold(
       backgroundColor: Colors.white,
       appBar: AppBar(
@@ -86,15 +84,10 @@ class _UpdateAdressesLivraisonPageState extends State<UpdateAdressesLivraisonPag
                   child: ElevatedButton(
                     onPressed: () {
                       if (_formKey.currentState!.validate()) {
-                        adresseProvider.updateAdresse(
-                          _addressController.text,
-                          _cityController.text,
-                          _postalCodeController.text,
-                        );
-
+                        // Simule une sauvegarde en local
                         ScaffoldMessenger.of(context).showSnackBar(
                           SnackBar(
-                            content: Text('Adresse de livraison mise à jour avec succès!'),
+                            content: Text('Adresse mise à jour avec succès !'),
                           ),
                         );
                       }
