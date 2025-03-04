@@ -1,14 +1,14 @@
 class PaymentInfo {
-  final String cardNumber;
-  final String expiryDate;
-  final String cvv;
-  final String name;
-  final String address;
-  final String city;
-  final String country;
-  final String? applePayID;
-  final String? googlePayID;
-  final String? paypalEmail;
+   String cardNumber;
+   String expiryDate;
+   String cvv;
+   String name;
+   String address;
+   String city;
+   String country;
+   String? applePayID;
+   String? googlePayID;
+   String? paypalEmail;
 
   PaymentInfo({
     required this.cardNumber,
