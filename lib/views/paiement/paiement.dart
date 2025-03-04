@@ -66,45 +66,17 @@ class PaymentPage extends StatelessWidget {
             ),
             SizedBox(height: 16),
 
-            // Formulaire de paiement pour la carte de crédit
-            if (paymentProvider.selectedPaymentMethod == 'Carte de Crédit')
-              Form(
-                child: Column(
-                  children: [
-                    TextFormField(
-                      initialValue: paymentProvider.paymentInfo.name,
-                      decoration: InputDecoration(labelText: 'Nom sur la carte'),
-                      onChanged: (value) => paymentProvider.paymentInfo.name = value,
-                    ),
-                    TextFormField(
-                      initialValue: paymentProvider.paymentInfo.cardNumber,
-                      decoration: InputDecoration(labelText: 'Numéro de carte'),
-                      keyboardType: TextInputType.number,
-                      onChanged: (value) => paymentProvider.paymentInfo.cardNumber = value,
-                    ),
-                    Row(
-                      children: [
-                        Expanded(
-                          child: TextFormField(
-                            initialValue: paymentProvider.paymentInfo.expiryDate,
-                            decoration: InputDecoration(labelText: 'Date d\'expiration'),
-                            onChanged: (value) => paymentProvider.paymentInfo.expiryDate = value,
-                          ),
-                        ),
-                        SizedBox(width: 16),
-                        Expanded(
-                          child: TextFormField(
-                            initialValue: paymentProvider.paymentInfo.cvv,
-                            decoration: InputDecoration(labelText: 'CVV'),
-                            obscureText: true,
-                            onChanged: (value) => paymentProvider.paymentInfo.cvv = value,
-                          ),
-                        ),
-                      ],
-                    ),
-                  ],
-                ),
-              ),
+            // Formulaire spécifique à chaque méthode de paiement
+            if (paymentProvider.selectedPaymentMethod == 'Carte de Crédit') ...[
+              _buildCreditCardForm(paymentProvider),
+            ] else if (paymentProvider.selectedPaymentMethod == 'PayPal') ...[
+              _buildPayPalForm(paymentProvider),
+            ] else if (paymentProvider.selectedPaymentMethod == 'Apple Pay') ...[
+              _buildApplePayForm(paymentProvider),
+            ] else if (paymentProvider.selectedPaymentMethod == 'Google Pay') ...[
+              _buildGooglePayForm(paymentProvider),
+            ],
+
             SizedBox(height: 16),
 
             // Bouton de confirmation de paiement
@@ -124,6 +96,87 @@ class PaymentPage extends StatelessWidget {
           ],
         ),
       ),
+    );
+  }
+
+  // Formulaire pour Carte de Crédit
+  Widget _buildCreditCardForm(PaymentProvider paymentProvider) {
+    return Column(
+      children: [
+        TextFormField(
+          initialValue: paymentProvider.paymentInfo.name,
+          decoration: InputDecoration(labelText: 'Nom sur la carte'),
+          onChanged: (value) => paymentProvider.paymentInfo.name = value,
+        ),
+        TextFormField(
+          initialValue: paymentProvider.paymentInfo.cardNumber,
+          decoration: InputDecoration(labelText: 'Numéro de carte'),
+          keyboardType: TextInputType.number,
+          onChanged: (value) => paymentProvider.paymentInfo.cardNumber = value,
+        ),
+        Row(
+          children: [
+            Expanded(
+              child: TextFormField(
+                initialValue: paymentProvider.paymentInfo.expiryDate,
+                decoration: InputDecoration(labelText: 'Date d\'expiration'),
+                onChanged: (value) => paymentProvider.paymentInfo.expiryDate = value,
+              ),
+            ),
+            SizedBox(width: 16),
+            Expanded(
+              child: TextFormField(
+                initialValue: paymentProvider.paymentInfo.cvv,
+                decoration: InputDecoration(labelText: 'CVV'),
+                obscureText: true,
+                onChanged: (value) => paymentProvider.paymentInfo.cvv = value,
+              ),
+            ),
+          ],
+        ),
+      ],
+    );
+  }
+
+  // Formulaire pour PayPal
+  Widget _buildPayPalForm(PaymentProvider paymentProvider) {
+    return Column(
+      children: [
+        TextFormField(
+          initialValue: paymentProvider.paymentInfo.paypalEmail,
+          decoration: InputDecoration(labelText: 'E-mail PayPal'),
+          keyboardType: TextInputType.emailAddress,
+          onChanged: (value) => paymentProvider.paymentInfo.paypalEmail = value,
+        ),
+      ],
+    );
+  }
+
+  // Formulaire pour Apple Pay
+  Widget _buildApplePayForm(PaymentProvider paymentProvider) {
+    return Column(
+      children: [
+        TextFormField(
+          initialValue: paymentProvider.paymentInfo.applePayID,
+          decoration: InputDecoration(labelText: 'Apple Pay ID'),
+          keyboardType: TextInputType.text,
+          onChanged: (value) => paymentProvider.paymentInfo.applePayID = value,
+        ),
+      ],
+    );
+  }
+
+  // Formulaire pour Google Pay
+  Widget _buildGooglePayForm(PaymentProvider paymentProvider) {
+    return Column(
+      children: [
+        TextFormField(
+          initialValue: paymentProvider.paymentInfo.googlePayID,
+          decoration: InputDecoration(labelText: 'Google Pay ID'),
+          keyboardType: TextInputType.text,
+          onChanged: (value) => paymentProvider.paymentInfo.googlePayID = value,
+        ),
+      ],
     );
   }
 }
