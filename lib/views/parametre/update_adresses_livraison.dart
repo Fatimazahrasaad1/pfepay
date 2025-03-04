@@ -2,11 +2,34 @@ import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import 'package:mkadia/provider/adresseprovider.dart';
 
-class UpdateAdressesLivraisonPage extends StatelessWidget {
+class UpdateAdressesLivraisonPage extends StatefulWidget {
+  @override
+  _UpdateAdressesLivraisonPageState createState() => _UpdateAdressesLivraisonPageState();
+}
+
+class _UpdateAdressesLivraisonPageState extends State<UpdateAdressesLivraisonPage> {
   final _formKey = GlobalKey<FormState>();
-  final TextEditingController _addressController = TextEditingController();
-  final TextEditingController _cityController = TextEditingController();
-  final TextEditingController _postalCodeController = TextEditingController();
+  late TextEditingController _addressController;
+  late TextEditingController _cityController;
+  late TextEditingController _postalCodeController;
+
+  @override
+  void initState() {
+    super.initState();
+    final adresseProvider = Provider.of<AdresseProvider>(context, listen: false);
+    
+    _addressController = TextEditingController(text: adresseProvider.address);
+    _cityController = TextEditingController(text: adresseProvider.city);
+    _postalCodeController = TextEditingController(text: adresseProvider.postalCode);
+  }
+
+  @override
+  void dispose() {
+    _addressController.dispose();
+    _cityController.dispose();
+    _postalCodeController.dispose();
+    super.dispose();
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -71,8 +94,7 @@ class UpdateAdressesLivraisonPage extends StatelessWidget {
 
                         ScaffoldMessenger.of(context).showSnackBar(
                           SnackBar(
-                            content:
-                                Text('Adresse de livraison mise à jour avec succès!'),
+                            content: Text('Adresse de livraison mise à jour avec succès!'),
                           ),
                         );
                       }
