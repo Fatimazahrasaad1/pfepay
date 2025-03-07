@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
-import 'package:mkadia/provider/PaymentManager.dart'; // Import du gestionnaire de paiement
+import 'package:mkadia/provider/PaymentManager.dart';
 
 class PaymentPage extends StatelessWidget {
   @override
@@ -18,7 +18,6 @@ class PaymentPage extends StatelessWidget {
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
-            // Affichage de l'adresse de livraison
             Text(
               'Adresse de Livraison',
               style: TextStyle(fontSize: 18, fontWeight: FontWeight.bold, color: Colors.grey[700]),
@@ -37,7 +36,6 @@ class PaymentPage extends StatelessWidget {
             Divider(),
             SizedBox(height: 16),
 
-            // Sélection de la méthode de paiement
             Text(
               'Méthode de Paiement',
               style: TextStyle(fontSize: 18, fontWeight: FontWeight.bold, color: Colors.grey[700]),
@@ -51,7 +49,7 @@ class PaymentPage extends StatelessWidget {
                   value: paymentManager.selectedPaymentMethod,
                   onChanged: (String? newValue) {
                     if (newValue != null) {
-                      paymentManager.setPaymentMethod(newValue);
+                      paymentManager.setSelectedPaymentMethod(newValue);
                     }
                   },
                   items: <String>['Carte de Crédit', 'PayPal', 'Apple Pay', 'Google Pay']
@@ -66,7 +64,6 @@ class PaymentPage extends StatelessWidget {
             ),
             SizedBox(height: 16),
 
-            // Formulaire spécifique à chaque méthode de paiement
             if (paymentManager.selectedPaymentMethod == 'Carte de Crédit') ...[
               _buildCreditCardForm(paymentManager),
             ] else if (paymentManager.selectedPaymentMethod == 'PayPal') ...[
@@ -79,14 +76,12 @@ class PaymentPage extends StatelessWidget {
 
             SizedBox(height: 16),
 
-            // Bouton de confirmation de paiement
             ElevatedButton(
               onPressed: () {
                 // Ajouter votre logique de confirmation ici
-                paymentManager.savePaymentInfo();
               },
               style: ElevatedButton.styleFrom(
-                backgroundColor: Colors.green, // couleur du bouton
+                backgroundColor: Colors.green,
                 padding: EdgeInsets.symmetric(vertical: 16),
                 shape: RoundedRectangleBorder(
                   borderRadius: BorderRadius.circular(8),
@@ -100,20 +95,19 @@ class PaymentPage extends StatelessWidget {
     );
   }
 
-  // Formulaire pour Carte de Crédit
   Widget _buildCreditCardForm(PaymentManager paymentManager) {
     return Column(
       children: [
         TextFormField(
           initialValue: paymentManager.paymentInfo.name,
           decoration: InputDecoration(labelText: 'Nom sur la carte'),
-          onChanged: (value) => paymentManager.paymentInfo.name = value,
+          onChanged: (value) => paymentManager.updatePaymentInfo(paymentManager.paymentInfo.copyWith(name: value)),
         ),
         TextFormField(
           initialValue: paymentManager.paymentInfo.cardNumber,
           decoration: InputDecoration(labelText: 'Numéro de carte'),
           keyboardType: TextInputType.number,
-          onChanged: (value) => paymentManager.paymentInfo.cardNumber = value,
+          onChanged: (value) => paymentManager.updatePaymentInfo(paymentManager.paymentInfo.copyWith(cardNumber: value)),
         ),
         Row(
           children: [
@@ -121,7 +115,7 @@ class PaymentPage extends StatelessWidget {
               child: TextFormField(
                 initialValue: paymentManager.paymentInfo.expiryDate,
                 decoration: InputDecoration(labelText: 'Date d\'expiration'),
-                onChanged: (value) => paymentManager.paymentInfo.expiryDate = value,
+                onChanged: (value) => paymentManager.updatePaymentInfo(paymentManager.paymentInfo.copyWith(expiryDate: value)),
               ),
             ),
             SizedBox(width: 16),
@@ -130,7 +124,7 @@ class PaymentPage extends StatelessWidget {
                 initialValue: paymentManager.paymentInfo.cvv,
                 decoration: InputDecoration(labelText: 'CVV'),
                 obscureText: true,
-                onChanged: (value) => paymentManager.paymentInfo.cvv = value,
+                onChanged: (value) => paymentManager.updatePaymentInfo(paymentManager.paymentInfo.copyWith(cvv: value)),
               ),
             ),
           ],
@@ -139,7 +133,6 @@ class PaymentPage extends StatelessWidget {
     );
   }
 
-  // Formulaire pour PayPal
   Widget _buildPayPalForm(PaymentManager paymentManager) {
     return Column(
       children: [
@@ -147,13 +140,12 @@ class PaymentPage extends StatelessWidget {
           initialValue: paymentManager.paymentInfo.paypalEmail,
           decoration: InputDecoration(labelText: 'E-mail PayPal'),
           keyboardType: TextInputType.emailAddress,
-          onChanged: (value) => paymentManager.paymentInfo.paypalEmail = value,
+          onChanged: (value) => paymentManager.updatePaymentInfo(paymentManager.paymentInfo.copyWith(paypalEmail: value)),
         ),
       ],
     );
   }
 
-  // Formulaire pour Apple Pay
   Widget _buildApplePayForm(PaymentManager paymentManager) {
     return Column(
       children: [
@@ -161,13 +153,12 @@ class PaymentPage extends StatelessWidget {
           initialValue: paymentManager.paymentInfo.applePayID,
           decoration: InputDecoration(labelText: 'Apple Pay ID'),
           keyboardType: TextInputType.text,
-          onChanged: (value) => paymentManager.paymentInfo.applePayID = value,
+          onChanged: (value) => paymentManager.updatePaymentInfo(paymentManager.paymentInfo.copyWith(applePayID: value)),
         ),
       ],
     );
   }
 
-  // Formulaire pour Google Pay
   Widget _buildGooglePayForm(PaymentManager paymentManager) {
     return Column(
       children: [
@@ -175,7 +166,7 @@ class PaymentPage extends StatelessWidget {
           initialValue: paymentManager.paymentInfo.googlePayID,
           decoration: InputDecoration(labelText: 'Google Pay ID'),
           keyboardType: TextInputType.text,
-          onChanged: (value) => paymentManager.paymentInfo.googlePayID = value,
+          onChanged: (value) => paymentManager.updatePaymentInfo(paymentManager.paymentInfo.copyWith(googlePayID: value)),
         ),
       ],
     );
