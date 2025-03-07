@@ -1,7 +1,59 @@
-import 'package:mkadia/models/info_paiement.dart';
+import 'package:flutter/material.dart';
 
-class PaymentManager {
-  PaymentInfo paymentInfo = PaymentInfo(
+class PaymentInfo {
+  String cardNumber;
+  String expiryDate;
+  String cvv;
+  String name;
+  String address;
+  String city;
+  String country;
+  String? applePayID;
+  String? googlePayID;
+  String? paypalEmail;
+
+  PaymentInfo({
+    required this.cardNumber,
+    required this.expiryDate,
+    required this.cvv,
+    required this.name,
+    required this.address,
+    required this.city,
+    required this.country,
+    this.applePayID,
+    this.googlePayID,
+    this.paypalEmail,
+  });
+
+  PaymentInfo copyWith({
+    String? cardNumber,
+    String? expiryDate,
+    String? cvv,
+    String? name,
+    String? address,
+    String? city,
+    String? country,
+    String? applePayID,
+    String? googlePayID,
+    String? paypalEmail,
+  }) {
+    return PaymentInfo(
+      cardNumber: cardNumber ?? this.cardNumber,
+      expiryDate: expiryDate ?? this.expiryDate,
+      cvv: cvv ?? this.cvv,
+      name: name ?? this.name,
+      address: address ?? this.address,
+      city: city ?? this.city,
+      country: country ?? this.country,
+      applePayID: applePayID ?? this.applePayID,
+      googlePayID: googlePayID ?? this.googlePayID,
+      paypalEmail: paypalEmail ?? this.paypalEmail,
+    );
+  }
+}
+
+class PaymentManager extends ChangeNotifier {
+  PaymentInfo _paymentInfo = PaymentInfo(
     cardNumber: '',
     expiryDate: '',
     cvv: '',
@@ -11,13 +63,56 @@ class PaymentManager {
     country: '',
   );
 
-  String selectedPaymentMethod = 'Carte de Crédit';
+  String _selectedPaymentMethod = 'Carte de Crédit';
 
-  void setPaymentMethod(String method) {
-    selectedPaymentMethod = method;
+  PaymentInfo get paymentInfo => _paymentInfo;
+  String get selectedPaymentMethod => _selectedPaymentMethod;
+
+  void setSelectedPaymentMethod(String method) {
+    _selectedPaymentMethod = method;
+    notifyListeners();
   }
 
   void updatePaymentInfo(PaymentInfo newInfo) {
-    paymentInfo = newInfo;
+    _paymentInfo = newInfo;
+    notifyListeners();
+  }
+
+  void savePaymentInfo(BuildContext context) {
+    // Simuler la sauvegarde des informations de paiement
+    print('Informations de paiement sauvegardées: $_paymentInfo');
+    ScaffoldMessenger.of(context).showSnackBar(
+      SnackBar(content: Text('Informations de paiement sauvegardées avec succès!')),
+    );
+  }
+
+  // Exemple de données de paiement
+  static List<PaymentInfo> examplePayments() {
+    return [
+      PaymentInfo(
+        cardNumber: '1234567812345678',
+        expiryDate: '12/25',
+        cvv: '123',
+        name: 'John Doe',
+        address: '123 Main Street',
+        city: 'Paris',
+        country: 'France',
+        applePayID: 'john.doe@apple.com',
+        googlePayID: 'johndoe@google.com',
+        paypalEmail: 'john.doe@paypal.com',
+      ),
+      PaymentInfo(
+        cardNumber: '8765432187654321',
+        expiryDate: '06/24',
+        cvv: '456',
+        name: 'Jane Smith',
+        address: '456 Elm Street',
+        city: 'Lyon',
+        country: 'France',
+        applePayID: 'jane.smith@apple.com',
+        googlePayID: 'janesmith@google.com',
+        paypalEmail: 'jane.smith@paypal.com',
+      ),
+    ];
   }
 }
