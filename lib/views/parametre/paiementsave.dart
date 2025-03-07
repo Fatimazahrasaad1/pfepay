@@ -9,7 +9,7 @@ class PaymentSavePage extends StatelessWidget {
       create: (context) => PaymentManager(),
       child: Scaffold(
         appBar: AppBar(
-          title: Text('Méthodes de Paiement'),
+          title: const Text('Méthodes de Paiement'),
           backgroundColor: Colors.green,
         ),
         backgroundColor: Colors.green[50],
@@ -18,26 +18,26 @@ class PaymentSavePage extends StatelessWidget {
           child: Column(
             children: [
               _buildPaymentOption(context, 'Credit Card', 'assets/icons/creditcard.png'),
-              SizedBox(height: 10),
+              const SizedBox(height: 10),
               _buildPaymentOption(context, 'PayPal', 'assets/icons/paypal.png'),
-              SizedBox(height: 10),
+              const SizedBox(height: 10),
               _buildPaymentOption(context, 'Apple Pay', 'assets/icons/apple-pay.png'),
-              SizedBox(height: 10),
+              const SizedBox(height: 10),
               _buildPaymentOption(context, 'Google Pay', 'assets/icons/google-pay.png'),
-              SizedBox(height: 20),
+              const SizedBox(height: 20),
               Consumer<PaymentManager>(
                 builder: (context, manager, child) => _buildPaymentFields(manager),
               ),
-              SizedBox(height: 20),
+              const SizedBox(height: 20),
               ElevatedButton(
                 onPressed: () {
                   Provider.of<PaymentManager>(context, listen: false).savePaymentInfo(context);
                 },
-                child: Text('Enregistrer'),
                 style: ElevatedButton.styleFrom(
                   backgroundColor: Colors.green,
                   foregroundColor: Colors.white,
                 ),
+                child: const Text('Enregistrer'),
               ),
             ],
           ),
@@ -97,10 +97,10 @@ class PaymentSavePage extends StatelessWidget {
           child: Row(
             children: [
               Image.asset(iconPath, height: 40),
-              SizedBox(width: 20),
+              const SizedBox(width: 20),
               Text(
                 method,
-                style: TextStyle(fontSize: 16, fontWeight: FontWeight.bold),
+                style: const TextStyle(fontSize: 16, fontWeight: FontWeight.bold),
               ),
             ],
           ),
