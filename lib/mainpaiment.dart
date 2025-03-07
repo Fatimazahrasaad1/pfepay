@@ -1,32 +1,40 @@
 import 'package:flutter/material.dart';
+import 'package:provider/provider.dart';
 import 'package:mkadia/provider/PaymentManager.dart';
-import 'package:mkadia/views/parametre/paiementsave.dart';
 import 'package:mkadia/views/paiement/paiement.dart';
+import 'package:mkadia/views/parametre/paiementsave.dart';
 
 void main() {
-  runApp(MyApp());
+  runApp(
+    MultiProvider(
+      providers: [
+        ChangeNotifierProvider(create: (_) => PaymentManager()),
+      ],
+      child: MyApp(),
+    ),
+  );
 }
 
 class MyApp extends StatelessWidget {
-  final PaymentManager paymentManager = PaymentManager();
-
   @override
   Widget build(BuildContext context) {
     return MaterialApp(
-      debugShowCheckedModeBanner: false,
-      home: HomePage(paymentManager: paymentManager),
+      title: 'Payment App',
+      theme: ThemeData(
+        primarySwatch: Colors.green,
+      ),
+      home: HomePage(),
     );
   }
 }
 
 class HomePage extends StatelessWidget {
-  final PaymentManager paymentManager;
-  HomePage({required this.paymentManager});
-
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: AppBar(title: Text('Accueil'), backgroundColor: Colors.green),
+      appBar: AppBar(
+        title: Text('Accueil'),
+      ),
       body: Center(
         child: Column(
           mainAxisAlignment: MainAxisAlignment.center,
@@ -35,24 +43,20 @@ class HomePage extends StatelessWidget {
               onPressed: () {
                 Navigator.push(
                   context,
-                  MaterialPageRoute(
-                      builder: (context) =>
-                          PaymentPage(paymentManager: paymentManager)),
+                  MaterialPageRoute(builder: (context) => PaymentPage()),
                 );
               },
-              child: Text('Aller à la page Paiement'),
+              child: Text('Page de Paiement'),
             ),
             SizedBox(height: 20),
             ElevatedButton(
               onPressed: () {
                 Navigator.push(
                   context,
-                  MaterialPageRoute(
-                      builder: (context) =>
-                          PaymentSavePage(paymentManager: paymentManager)),
+                  MaterialPageRoute(builder: (context) => PaymentSavePage()),
                 );
               },
-              child: Text('Aller à la page Enregistrement Paiement'),
+              child: Text('Sauvegarder Paiement'),
             ),
           ],
         ),
