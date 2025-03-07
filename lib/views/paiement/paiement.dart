@@ -3,6 +3,8 @@ import 'package:provider/provider.dart';
 import 'package:mkadia/provider/PaymentManager.dart';
 
 class PaymentPage extends StatelessWidget {
+  const PaymentPage({super.key});
+
   @override
   Widget build(BuildContext context) {
     final paymentManager = Provider.of<PaymentManager>(context);
