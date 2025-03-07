@@ -1,15 +1,20 @@
 import 'package:flutter/material.dart';
-import 'package:provider/provider.dart';
 import 'package:mkadia/provider/PaymentManager.dart';
+import 'package:provider/provider.dart';
+ // Assurez-vous d'importer PaymentManager
 
 class PaymentSavePage extends StatelessWidget {
+  final PaymentManager paymentManager; // Ajoutez ce champ
+
+  PaymentSavePage({required this.paymentManager}); // Modifiez le constructeur
+
   @override
   Widget build(BuildContext context) {
     return ChangeNotifierProvider(
-      create: (context) => PaymentManager(),
+      create: (context) => paymentManager, // Utilisez le paymentManager passé
       child: Scaffold(
         appBar: AppBar(
-          title: const Text('Méthodes de Paiement'),
+          title: Text('Méthodes de Paiement'),
           backgroundColor: Colors.green,
         ),
         backgroundColor: Colors.green[50],
@@ -18,26 +23,26 @@ class PaymentSavePage extends StatelessWidget {
           child: Column(
             children: [
               _buildPaymentOption(context, 'Credit Card', 'assets/icons/creditcard.png'),
-              const SizedBox(height: 10),
+              SizedBox(height: 10),
               _buildPaymentOption(context, 'PayPal', 'assets/icons/paypal.png'),
-              const SizedBox(height: 10),
+              SizedBox(height: 10),
               _buildPaymentOption(context, 'Apple Pay', 'assets/icons/apple-pay.png'),
-              const SizedBox(height: 10),
+              SizedBox(height: 10),
               _buildPaymentOption(context, 'Google Pay', 'assets/icons/google-pay.png'),
-              const SizedBox(height: 20),
+              SizedBox(height: 20),
               Consumer<PaymentManager>(
                 builder: (context, manager, child) => _buildPaymentFields(manager),
               ),
-              const SizedBox(height: 20),
+              SizedBox(height: 20),
               ElevatedButton(
                 onPressed: () {
                   Provider.of<PaymentManager>(context, listen: false).savePaymentInfo(context);
                 },
+                child: Text('Enregistrer'),
                 style: ElevatedButton.styleFrom(
                   backgroundColor: Colors.green,
                   foregroundColor: Colors.white,
                 ),
-                child: const Text('Enregistrer'),
               ),
             ],
           ),
@@ -97,10 +102,10 @@ class PaymentSavePage extends StatelessWidget {
           child: Row(
             children: [
               Image.asset(iconPath, height: 40),
-              const SizedBox(width: 20),
+              SizedBox(width: 20),
               Text(
                 method,
-                style: const TextStyle(fontSize: 16, fontWeight: FontWeight.bold),
+                style: TextStyle(fontSize: 16, fontWeight: FontWeight.bold),
               ),
             ],
           ),
