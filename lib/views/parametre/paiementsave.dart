@@ -8,7 +8,7 @@ class PaymentSavePage extends StatelessWidget {
 
   PaymentSavePage({required this.paymentManager}); // Modifiez le constructeur
 
-  @override
+  @override 
   Widget build(BuildContext context) {
     return ChangeNotifierProvider(
       create: (context) => paymentManager, // Utilisez le paymentManager passé
