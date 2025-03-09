@@ -1,17 +1,16 @@
 import 'package:flutter/material.dart';
 import 'package:mkadia/provider/PaymentManager.dart';
 import 'package:provider/provider.dart';
- // Assurez-vous d'importer PaymentManager
 
 class PaymentSavePage extends StatelessWidget {
-  final PaymentManager paymentManager; // Ajoutez ce champ
+  final PaymentManager paymentManager;
 
-  PaymentSavePage({required this.paymentManager}); // Modifiez le constructeur
+  PaymentSavePage({required this.paymentManager});
 
-  @override 
+  @override
   Widget build(BuildContext context) {
     return ChangeNotifierProvider(
-      create: (context) => paymentManager, // Utilisez le paymentManager passé
+      create: (context) => paymentManager,
       child: Scaffold(
         appBar: AppBar(
           title: Text('Méthodes de Paiement'),
@@ -73,19 +72,20 @@ class PaymentSavePage extends StatelessWidget {
         });
       case 'Apple Pay':
       case 'Google Pay':
-        return Column(
-          children: [
-            _buildTextField('Numéro de téléphone', manager.paymentInfo.applePayID ?? '', (value) {
-              manager.updatePaymentInfo(manager.paymentInfo.copyWith(applePayID: value));
-            }),
-            _buildTextField('Adresse', manager.paymentInfo.address, (value) {
-              manager.updatePaymentInfo(manager.paymentInfo.copyWith(address: value));
-            }),
-          ],
-        );
+        return _buildApplePayForm(manager); // Utilisez la nouvelle méthode ici
       default:
         return Container();
     }
+  }
+
+  Widget _buildApplePayForm(PaymentManager paymentManager) {
+    return Column(
+      children: [
+        _buildTextField('Apple Pay ID', paymentManager.paymentInfo.applePayID ?? '', (value) {
+          paymentManager.updatePaymentInfo(paymentManager.paymentInfo.copyWith(applePayID: value));
+        }),
+      ],
+    );
   }
 
   Widget _buildPaymentOption(BuildContext context, String method, String iconPath) {
