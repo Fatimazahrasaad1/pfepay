@@ -7,104 +7,106 @@ class PaymentPage extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final paymentManager = Provider.of<PaymentManager>(context);
-
-    return Scaffold(
-      appBar: AppBar(
-        title: const Text('Paiement'),
-        backgroundColor: Colors.green,
-        elevation: 0,
-      ),
-      body: SingleChildScrollView(
-        padding: const EdgeInsets.all(20.0),
-        child: Column(
-          crossAxisAlignment: CrossAxisAlignment.start,
-          children: [
-            Text(
-              'Adresse de Livraison',
-              style: TextStyle(fontSize: 18, fontWeight: FontWeight.bold, color: Colors.grey[700]),
-            ),
-            const SizedBox(height: 8),
-            Card(
-              elevation: 2,
-              child: Padding(
-                padding: const EdgeInsets.all(12.0),
-                child: Text(
-                  '${paymentManager.paymentInfo.address}, ${paymentManager.paymentInfo.city}, ${paymentManager.paymentInfo.country}',
-                  style: const TextStyle(fontSize: 16),
+    return Consumer<PaymentManager>(
+      builder: (context, paymentManager, child) {
+        return Scaffold(
+          appBar: AppBar(
+            title: const Text('Paiement'),
+            backgroundColor: Colors.green,
+            elevation: 0,
+          ),
+          body: SingleChildScrollView(
+            padding: const EdgeInsets.all(20.0),
+            child: Column(
+              crossAxisAlignment: CrossAxisAlignment.start,
+              children: [
+                Text(
+                  'Adresse de Livraison',
+                  style: TextStyle(fontSize: 18, fontWeight: FontWeight.bold, color: Colors.grey[700]),
                 ),
-              ),
-            ),
-            const Divider(),
-            const SizedBox(height: 16),
-
-            Text(
-              'Méthode de Paiement',
-              style: TextStyle(fontSize: 18, fontWeight: FontWeight.bold, color: Colors.grey[700]),
-            ),
-            const SizedBox(height: 8),
-
-            Card(
-              elevation: 2,
-              child: Padding(
-                padding: const EdgeInsets.all(12.0),
-                child: Column(
-                  crossAxisAlignment: CrossAxisAlignment.start,
-                  children: [
-                    Text(
-                      'Sélectionnez une méthode de paiement:',
-                      style: TextStyle(fontSize: 16, fontWeight: FontWeight.bold),
+                const SizedBox(height: 8),
+                Card(
+                  elevation: 2,
+                  child: Padding(
+                    padding: const EdgeInsets.all(12.0),
+                    child: Text(
+                      '${paymentManager.paymentInfo.address}, ${paymentManager.paymentInfo.city}, ${paymentManager.paymentInfo.country}',
+                      style: const TextStyle(fontSize: 16),
                     ),
-                    const SizedBox(height: 8),
-                    Wrap(
-                      spacing: 10,
-                      children: ['Carte de Crédit', 'PayPal', 'Apple Pay', 'Google Pay'].map((method) {
-                        return ElevatedButton(
-                          onPressed: () {
-                            paymentManager.setSelectedPaymentMethod(method);
-                          },
-                          style: ElevatedButton.styleFrom(
-                            backgroundColor: paymentManager.selectedPaymentMethod == method ? Colors.green : Colors.grey[300],
-                            foregroundColor: paymentManager.selectedPaymentMethod == method ? Colors.white : Colors.black,
-                          ),
-                          child: Text(method),
-                        );
-                      }).toList(),
+                  ),
+                ),
+                const Divider(),
+                const SizedBox(height: 16),
+
+                Text(
+                  'Méthode de Paiement',
+                  style: TextStyle(fontSize: 18, fontWeight: FontWeight.bold, color: Colors.grey[700]),
+                ),
+                const SizedBox(height: 8),
+
+                Card(
+                  elevation: 2,
+                  child: Padding(
+                    padding: const EdgeInsets.all(12.0),
+                    child: Column(
+                      crossAxisAlignment: CrossAxisAlignment.start,
+                      children: [
+                        Text(
+                          'Sélectionnez une méthode de paiement:',
+                          style: TextStyle(fontSize: 16, fontWeight: FontWeight.bold),
+                        ),
+                        const SizedBox(height: 8),
+                        Wrap(
+                          spacing: 10,
+                          children: ['Carte de Crédit', 'PayPal', 'Apple Pay', 'Google Pay'].map((method) {
+                            return ElevatedButton(
+                              onPressed: () {
+                                paymentManager.setSelectedPaymentMethod(method);
+                              },
+                              style: ElevatedButton.styleFrom(
+                                backgroundColor: paymentManager.selectedPaymentMethod == method ? Colors.green : Colors.grey[300],
+                                foregroundColor: paymentManager.selectedPaymentMethod == method ? Colors.white : Colors.black,
+                              ),
+                              child: Text(method),
+                            );
+                          }).toList(),
+                        ),
+                      ],
                     ),
-                  ],
+                  ),
                 ),
-              ),
-            ),
-            const SizedBox(height: 16),
+                const SizedBox(height: 16),
 
-            if (paymentManager.selectedPaymentMethod == 'Carte de Crédit') ...[
-              _buildCreditCardForm(paymentManager),
-            ] else if (paymentManager.selectedPaymentMethod == 'PayPal') ...[
-              _buildPayPalForm(paymentManager),
-            ] else if (paymentManager.selectedPaymentMethod == 'Apple Pay') ...[
-              _buildApplePayForm(paymentManager),
-            ] else if (paymentManager.selectedPaymentMethod == 'Google Pay') ...[
-              _buildGooglePayForm(paymentManager),
-            ],
+                if (paymentManager.selectedPaymentMethod == 'Carte de Crédit') ...[
+                  _buildCreditCardForm(paymentManager),
+                ] else if (paymentManager.selectedPaymentMethod == 'PayPal') ...[
+                  _buildPayPalForm(paymentManager),
+                ] else if (paymentManager.selectedPaymentMethod == 'Apple Pay') ...[
+                  _buildApplePayForm(paymentManager),
+                ] else if (paymentManager.selectedPaymentMethod == 'Google Pay') ...[
+                  _buildGooglePayForm(paymentManager),
+                ],
 
-            const SizedBox(height: 16),
+                const SizedBox(height: 16),
 
-            ElevatedButton(
-              onPressed: () {
-                paymentManager.savePaymentInfo(context);
-              },
-              style: ElevatedButton.styleFrom(
-                backgroundColor: Colors.green,
-                padding: const EdgeInsets.symmetric(vertical: 16),
-                shape: RoundedRectangleBorder(
-                  borderRadius: BorderRadius.circular(8),
+                ElevatedButton(
+                  onPressed: () {
+                    paymentManager.savePaymentInfo(context);
+                  },
+                  style: ElevatedButton.styleFrom(
+                    backgroundColor: Colors.green,
+                    padding: const EdgeInsets.symmetric(vertical: 16),
+                    shape: RoundedRectangleBorder(
+                      borderRadius: BorderRadius.circular(8),
+                    ),
+                  ),
+                  child: const Text('Confirmer et Payer', style: TextStyle(color: Colors.white, fontSize: 16)),
                 ),
-              ),
-              child: const Text('Confirmer et Payer', style: TextStyle(color: Colors.white, fontSize: 16)),
+              ],
             ),
-          ],
-        ),
-      ),
+          ),
+        );
+      },
     );
   }
 
