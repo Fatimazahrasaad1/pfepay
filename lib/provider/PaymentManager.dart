@@ -79,40 +79,9 @@ class PaymentManager extends ChangeNotifier {
   }
 
   void savePaymentInfo(BuildContext context) {
-    // Simuler la sauvegarde des informations de paiement
     print('Informations de paiement sauvegardées: $_paymentInfo');
     ScaffoldMessenger.of(context).showSnackBar(
       SnackBar(content: Text('Informations de paiement sauvegardées avec succès!')),
     );
-  }
-
-  // Exemple de données de paiement
-  static List<PaymentInfo> examplePayments() {
-    return [
-      PaymentInfo(
-        cardNumber: '1234567812345678',
-        expiryDate: '12/25',
-        cvv: '123',
-        name: 'John Doe',
-        address: '123 Main Street',
-        city: 'Paris',
-        country: 'France',
-        applePayID: 'john.doe@apple.com',
-        googlePayID: 'johndoe@google.com',
-        paypalEmail: 'john.doe@paypal.com',
-      ),
-      PaymentInfo(
-        cardNumber: '8765432187654321',
-        expiryDate: '06/24',
-        cvv: '456',
-        name: 'Jane Smith',
-        address: '456 Elm Street',
-        city: 'Lyon',
-        country: 'France',
-        applePayID: 'jane.smith@apple.com',
-        googlePayID: 'janesmith@google.com',
-        paypalEmail: 'jane.smith@paypal.com',
-      ),
-    ];
   }
 }
