@@ -5,17 +5,17 @@ import 'package:mkadia/provider/PaymentManager.dart';
 class PaymentSavePage extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
-    return Consumer<PaymentManager>(
-      builder: (context, paymentManager, child) {
-        return Scaffold(
-          appBar: AppBar(
-            title: Text('Méthodes de Paiement'),
-            backgroundColor: Colors.green,
-          ),
-          backgroundColor: Colors.green[50],
-          body: Padding(
-            padding: const EdgeInsets.all(16.0),
-            child: Column(
+    return Scaffold(
+      appBar: AppBar(
+        title: Text('Méthodes de Paiement'),
+        backgroundColor: Colors.green,
+      ),
+      backgroundColor: Colors.green[50],
+      body: Padding(
+        padding: const EdgeInsets.all(16.0),
+        child: Consumer<PaymentManager>(
+          builder: (context, paymentManager, child) {
+            return Column(
               children: [
                 _buildPaymentOption(context, 'Carte de Crédit', 'assets/icons/creditcard.png'),
                 SizedBox(height: 10),
@@ -38,10 +38,10 @@ class PaymentSavePage extends StatelessWidget {
                   ),
                 ),
               ],
-            ),
-          ),
-        );
-      },
+            );
+          },
+        ),
+      ),
     );
   }
 
