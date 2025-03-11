@@ -1,58 +1,53 @@
 import 'package:flutter/material.dart';
-import 'package:mkadia/provider/PaymentManager.dart';
 import 'package:provider/provider.dart';
+import 'package:mkadia/provider/PaymentManager.dart';
 
 class PaymentSavePage extends StatelessWidget {
-  final PaymentManager paymentManager;
-
-  PaymentSavePage({required this.paymentManager});
-
   @override
   Widget build(BuildContext context) {
-    return ChangeNotifierProvider(
-      create: (context) => paymentManager,
-      child: Scaffold(
-        appBar: AppBar(
-          title: Text('Méthodes de Paiement'),
-          backgroundColor: Colors.green,
-        ),
-        backgroundColor: Colors.green[50],
-        body: Padding(
-          padding: const EdgeInsets.all(16.0),
-          child: Column(
-            children: [
-              _buildPaymentOption(context, 'Credit Card', 'assets/icons/creditcard.png'),
-              SizedBox(height: 10),
-              _buildPaymentOption(context, 'PayPal', 'assets/icons/paypal.png'),
-              SizedBox(height: 10),
-              _buildPaymentOption(context, 'Apple Pay', 'assets/icons/apple-pay.png'),
-              SizedBox(height: 10),
-              _buildPaymentOption(context, 'Google Pay', 'assets/icons/google-pay.png'),
-              SizedBox(height: 20),
-              Consumer<PaymentManager>(
-                builder: (context, manager, child) => _buildPaymentFields(manager),
-              ),
-              SizedBox(height: 20),
-              ElevatedButton(
-                onPressed: () {
-                  Provider.of<PaymentManager>(context, listen: false).savePaymentInfo(context);
-                },
-                child: Text('Enregistrer'),
-                style: ElevatedButton.styleFrom(
-                  backgroundColor: Colors.green,
-                  foregroundColor: Colors.white,
-                ),
-              ),
-            ],
+    return Consumer<PaymentManager>(
+      builder: (context, paymentManager, child) {
+        return Scaffold(
+          appBar: AppBar(
+            title: Text('Méthodes de Paiement'),
+            backgroundColor: Colors.green,
           ),
-        ),
-      ),
+          backgroundColor: Colors.green[50],
+          body: Padding(
+            padding: const EdgeInsets.all(16.0),
+            child: Column(
+              children: [
+                _buildPaymentOption(context, 'Carte de Crédit', 'assets/icons/creditcard.png'),
+                SizedBox(height: 10),
+                _buildPaymentOption(context, 'PayPal', 'assets/icons/paypal.png'),
+                SizedBox(height: 10),
+                _buildPaymentOption(context, 'Apple Pay', 'assets/icons/apple-pay.png'),
+                SizedBox(height: 10),
+                _buildPaymentOption(context, 'Google Pay', 'assets/icons/google-pay.png'),
+                SizedBox(height: 20),
+                _buildPaymentFields(paymentManager),
+                SizedBox(height: 20),
+                ElevatedButton(
+                  onPressed: () {
+                    paymentManager.savePaymentInfo(context);
+                  },
+                  child: Text('Enregistrer'),
+                  style: ElevatedButton.styleFrom(
+                    backgroundColor: Colors.green,
+                    foregroundColor: Colors.white,
+                  ),
+                ),
+              ],
+            ),
+          ),
+        );
+      },
     );
   }
 
   Widget _buildPaymentFields(PaymentManager manager) {
     switch (manager.selectedPaymentMethod) {
-      case 'Credit Card':
+      case 'Carte de Crédit':
         return Column(
           children: [
             _buildTextField('Numéro de carte', manager.paymentInfo.cardNumber, (value) {
@@ -70,22 +65,9 @@ class PaymentSavePage extends StatelessWidget {
         return _buildTextField('E-mail PayPal', manager.paymentInfo.paypalEmail ?? '', (value) {
           manager.updatePaymentInfo(manager.paymentInfo.copyWith(paypalEmail: value));
         });
-      case 'Apple Pay':
-      case 'Google Pay':
-        return _buildApplePayForm(manager); // Utilisez la nouvelle méthode ici
       default:
         return Container();
     }
-  }
-
-  Widget _buildApplePayForm(PaymentManager paymentManager) {
-    return Column(
-      children: [
-        _buildTextField('Apple Pay ID', paymentManager.paymentInfo.applePayID ?? '', (value) {
-          paymentManager.updatePaymentInfo(paymentManager.paymentInfo.copyWith(applePayID: value));
-        }),
-      ],
-    );
   }
 
   Widget _buildPaymentOption(BuildContext context, String method, String iconPath) {
