@@ -70,7 +70,7 @@ class ParametrePageState extends State<ParametrePage> {
                     Navigator.push(
                       context,
                       MaterialPageRoute(
-                        builder: (context) => PaymentSavePage(paymentManager: _paymentManager), // Correction ici
+                        builder: (context) => PaymentSavePage(), // Correction ici
                       ),
                     );
                   },
