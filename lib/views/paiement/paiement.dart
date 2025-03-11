@@ -43,24 +43,35 @@ class PaymentPage extends StatelessWidget {
               style: TextStyle(fontSize: 18, fontWeight: FontWeight.bold, color: Colors.grey[700]),
             ),
             const SizedBox(height: 8),
+
             Card(
               elevation: 2,
               child: Padding(
                 padding: const EdgeInsets.all(12.0),
-                child: DropdownButton<String>(
-                  value: paymentManager.selectedPaymentMethod,
-                  onChanged: (String? newValue) {
-                    if (newValue != null) {
-                      paymentManager.setSelectedPaymentMethod(newValue);
-                    }
-                  },
-                  items: <String>['Carte de Crédit', 'PayPal', 'Apple Pay', 'Google Pay']
-                      .map<DropdownMenuItem<String>>((String value) {
-                    return DropdownMenuItem<String>(
-                      value: value,
-                      child: Text(value),
-                    );
-                  }).toList(),
+                child: Column(
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  children: [
+                    Text(
+                      'Sélectionnez une méthode de paiement:',
+                      style: TextStyle(fontSize: 16, fontWeight: FontWeight.bold),
+                    ),
+                    const SizedBox(height: 8),
+                    Wrap(
+                      spacing: 10,
+                      children: ['Carte de Crédit', 'PayPal', 'Apple Pay', 'Google Pay'].map((method) {
+                        return ElevatedButton(
+                          onPressed: () {
+                            paymentManager.setSelectedPaymentMethod(method);
+                          },
+                          style: ElevatedButton.styleFrom(
+                            backgroundColor: paymentManager.selectedPaymentMethod == method ? Colors.green : Colors.grey[300],
+                            foregroundColor: paymentManager.selectedPaymentMethod == method ? Colors.white : Colors.black,
+                          ),
+                          child: Text(method),
+                        );
+                      }).toList(),
+                    ),
+                  ],
                 ),
               ),
             ),
@@ -80,7 +91,7 @@ class PaymentPage extends StatelessWidget {
 
             ElevatedButton(
               onPressed: () {
-                // Ajouter votre logique de confirmation ici
+                paymentManager.savePaymentInfo(context);
               },
               style: ElevatedButton.styleFrom(
                 backgroundColor: Colors.green,
