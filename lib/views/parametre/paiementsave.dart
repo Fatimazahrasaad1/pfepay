@@ -3,43 +3,50 @@ import 'package:provider/provider.dart';
 import 'package:mkadia/provider/PaymentManager.dart';
 
 class PaymentSavePage extends StatelessWidget {
+  final PaymentManager paymentManager;
+
+  PaymentSavePage({required this.paymentManager});
+
   @override
   Widget build(BuildContext context) {
-    return Scaffold(
-      appBar: AppBar(
-        title: Text('Méthodes de Paiement'),
-        backgroundColor: Colors.green,
-      ),
-      backgroundColor: Colors.green[50],
-      body: Padding(
-        padding: const EdgeInsets.all(16.0),
-        child: Consumer<PaymentManager>(
-          builder: (context, paymentManager, child) {
-            return Column(
-              children: [
-                _buildPaymentOption(context, 'Carte de Crédit', 'assets/icons/creditcard.png'),
-                SizedBox(height: 10),
-                _buildPaymentOption(context, 'PayPal', 'assets/icons/paypal.png'),
-                SizedBox(height: 10),
-                _buildPaymentOption(context, 'Apple Pay', 'assets/icons/apple-pay.png'),
-                SizedBox(height: 10),
-                _buildPaymentOption(context, 'Google Pay', 'assets/icons/google-pay.png'),
-                SizedBox(height: 20),
-                _buildPaymentFields(paymentManager),
-                SizedBox(height: 20),
-                ElevatedButton(
-                  onPressed: () {
-                    paymentManager.savePaymentInfo(context);
-                  },
-                  child: Text('Enregistrer'),
-                  style: ElevatedButton.styleFrom(
-                    backgroundColor: Colors.green,
-                    foregroundColor: Colors.white,
+    return ChangeNotifierProvider.value(
+      value: paymentManager,
+      child: Scaffold(
+        appBar: AppBar(
+          title: Text('Méthodes de Paiement'),
+          backgroundColor: Colors.green,
+        ),
+        backgroundColor: Colors.green[50],
+        body: Padding(
+          padding: const EdgeInsets.all(16.0),
+          child: Consumer<PaymentManager>(
+            builder: (context, paymentManager, child) {
+              return Column(
+                children: [
+                  _buildPaymentOption(context, 'Carte de Crédit', 'assets/icons/creditcard.png'),
+                  SizedBox(height: 10),
+                  _buildPaymentOption(context, 'PayPal', 'assets/icons/paypal.png'),
+                  SizedBox(height: 10),
+                  _buildPaymentOption(context, 'Apple Pay', 'assets/icons/apple-pay.png'),
+                  SizedBox(height: 10),
+                  _buildPaymentOption(context, 'Google Pay', 'assets/icons/google-pay.png'),
+                  SizedBox(height: 20),
+                  _buildPaymentFields(paymentManager),
+                  SizedBox(height: 20),
+                  ElevatedButton(
+                    onPressed: () {
+                      paymentManager.savePaymentInfo(context);
+                    },
+                    child: Text('Enregistrer'),
+                    style: ElevatedButton.styleFrom(
+                      backgroundColor: Colors.green,
+                      foregroundColor: Colors.white,
+                    ),
                   ),
-                ),
-              ],
-            );
-          },
+                ],
+              );
+            },
+          ),
         ),
       ),
     );
