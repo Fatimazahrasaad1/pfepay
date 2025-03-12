@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';  // Ajoutez le provider ici
-import 'package:mkadia/provider/provi_confidentialit%C3%A9.dart';  // Assurez-vous d'importer votre provider
+import 'package:mkadia/provider/provi_confidentialité.dart';  // Assurez-vous d'importer votre provider
 
 class GererLaConfidentialitePage extends StatelessWidget {
   @override
