@@ -1,29 +1,20 @@
 import 'package:flutter/material.dart';
-import 'package:provider/provider.dart';
-import 'package:mkadia/provider/PaymentManager.dart'; // Importez PaymentManager
-import 'package:mkadia/views/paiement/paiement.dart'; // Importez PaymentPage
 import 'package:mkadia/views/parametre/paiementsave.dart'; // Importez PaymentSavePage
+import 'package:mkadia/provider/PaymentManager.dart'; // Importez PaymentManager
 
 void main() {
-  runApp(
-    MultiProvider(
-      providers: [
-        ChangeNotifierProvider(create: (_) => PaymentManager()), // Fournir PaymentManager
-      ],
-      child: MyApp(),
-    ),
-  );
+  runApp(MyApp());
 }
 
 class MyApp extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return MaterialApp(
-      title: 'Payment App',
+      title: 'Mon Application',
       theme: ThemeData(
         primarySwatch: Colors.green,
       ),
-      home: HomePage(), // Page d'accueil avec les boutons
+      home: HomePage(), // Page d'accueil
     );
   }
 }
@@ -34,50 +25,24 @@ class HomePage extends StatelessWidget {
     return Scaffold(
       appBar: AppBar(
         title: Text('Accueil'),
-        backgroundColor: Colors.green,
       ),
       body: Center(
-        child: Column(
-          mainAxisAlignment: MainAxisAlignment.center,
-          children: [
-            // Bouton pour naviguer vers la page de paiement
-            ElevatedButton(
-              onPressed: () {
-                Navigator.push(
-                  context,
-                  MaterialPageRoute(
-                    builder: (context) => PaymentPage(), // Page de paiement
-                  ),
-                );
-              },
-              child: Text('Page de Paiement'),
-              style: ElevatedButton.styleFrom(
-                backgroundColor: Colors.green,
-                foregroundColor: Colors.white,
-                padding: EdgeInsets.symmetric(horizontal: 30, vertical: 15),
+        child: ElevatedButton(
+          onPressed: () {
+            // Créez une instance de PaymentManager
+            final paymentManager = PaymentManager();
+
+            // Naviguez vers PaymentSavePage en passant paymentManager
+            Navigator.push(
+              context,
+              MaterialPageRoute(
+                builder: (context) => PaymentSavePage(
+                  paymentManager: paymentManager, // Passez l'instance ici
+                ),
               ),
-            ),
-            SizedBox(height: 20), // Espace entre les boutons
-            // Bouton pour naviguer vers la page de sauvegarde des méthodes de paiement
-            ElevatedButton(
-              onPressed: () {
-                Navigator.push(
-                  context,
-                  MaterialPageRoute(
-                    builder: (context) => PaymentSavePage(
-                      paymentManager: Provider.of<PaymentManager>(context, listen: false), // Passer PaymentManager
-                    ),
-                  ),
-                );
-              },
-              child: Text('Sauvegarder Méthode de Paiement'),
-              style: ElevatedButton.styleFrom(
-                backgroundColor: Colors.green,
-                foregroundColor: Colors.white,
-                padding: EdgeInsets.symmetric(horizontal: 30, vertical: 15),
-              ),
-            ),
-          ],
+            );
+          },
+          child: Text('Aller à la page de paiement'),
         ),
       ),
     );
