@@ -5,6 +5,7 @@ import 'package:mkadia/views/parametre/update_adresses_livraison.dart' as livrai
 import 'package:mkadia/views/parametre/change_mot_de_pass.dart';
 import 'package:mkadia/views/parametre/gerer_la_confidentialité.dart' as confidentialite;
 import 'package:mkadia/views/profil/profil.dart';
+import 'package:mkadia/provider/PaymentManager.dart';
 
 class ParametrePage extends StatefulWidget {
   const ParametrePage({Key? key}) : super(key: key);
@@ -15,6 +16,7 @@ class ParametrePage extends StatefulWidget {
 
 class ParametrePageState extends State<ParametrePage> {
   bool _notificationsEnabled = true;
+  final PaymentManager paymentManager = PaymentManager(); // Instance de PaymentManager
 
   @override
   Widget build(BuildContext context) {
@@ -68,7 +70,9 @@ class ParametrePageState extends State<ParametrePage> {
                     Navigator.push(
                       context,
                       MaterialPageRoute(
-                        builder: (context) => PaymentSavePage(), // Correction ici
+                        builder: (context) => PaymentSavePage(
+                          paymentManager: paymentManager, // Passage de l'instance
+                        ),
                       ),
                     );
                   },
