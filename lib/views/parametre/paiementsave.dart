@@ -31,7 +31,7 @@ class PaymentSavePage extends StatelessWidget {
                   SizedBox(height: 10),
                   _buildPaymentOption(context, 'Google Pay', 'assets/icons/google-pay.png'),
                   SizedBox(height: 20),
-                  _buildPaymentFields(paymentManager),
+                  _buildPaymentFields(paymentManager), // Ajout du champ ID selon la sélection
                   SizedBox(height: 20),
                   ElevatedButton(
                     onPressed: () {
@@ -71,6 +71,14 @@ class PaymentSavePage extends StatelessWidget {
       case 'PayPal':
         return _buildTextField('E-mail PayPal', manager.paymentInfo.paypalEmail ?? '', (value) {
           manager.updatePaymentInfo(manager.paymentInfo.copyWith(paypalEmail: value));
+        });
+      case 'Apple Pay':
+        return _buildTextField('ID Apple Pay', manager.paymentInfo.applePayID ?? '', (value) {
+          manager.updatePaymentInfo(manager.paymentInfo.copyWith(applePayID: value));
+        });
+      case 'Google Pay':
+        return _buildTextField('ID Google Pay', manager.paymentInfo.googlePayID ?? '', (value) {
+          manager.updatePaymentInfo(manager.paymentInfo.copyWith(googlePayID: value));
         });
       default:
         return Container();
